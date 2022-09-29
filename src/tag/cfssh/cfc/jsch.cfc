@@ -231,7 +231,8 @@ component {
 		var err = "";
 		try {
 	        channel.connect();
-	        var remotedir = channel.pwd();
+	        //var remotedir = channel.pwd();
+			var remotedir = directory;
 	        var files = channel.ls(directory);
 	        var entries = queryNew("name,path,url,length,longname,hardlinks,accessed,lastModified,attributes,flags,extended,isdirectory,isLink,mode,owner,uid,group,gid");
 	        queryAddRow(entries,files.size());
@@ -380,6 +381,34 @@ component {
 		return exitstatus;
     }
 
+	function renamefile(required username, password="", key="", passphrase="", required host, numeric port=22, numeric timeout=30, fingerprint="", required oldpath, required newpath)  {
+		var jschSession = getSession(argumentCollection = arguments);
+		var err = "";
+		try {
+			channel = jschSession.openChannel("sftp");
+			channel.connect();
+			channel.rename(oldpath, newpath);
+			var exitstatus = channel.getExitStatus();
+			channel.exit();
+		}
+		catch (any ex) {
+			err = ex;
+		}
+		finally {
+			try {
+				channel.disconnect();
+				sleep(500); // give it a half second to realize we're exiting
+			} catch (any e) {}
+			try {
+				jschSession.disconnect();
+			} catch (any e) {}
+		}
+		if(isStruct(err)) {
+			throw(err);
+		}
+		return exitstatus;
+	}
+
 	function exists(required username, password="", key="", passphrase="", required host, numeric port=22, numeric timeout=30, fingerprint="", required item)  {
 		var jschSession = getSession(argumentCollection = arguments);
 		var err = "";
@@ -388,7 +417,7 @@ component {
 		try {
 	        channel = jschSession.openChannel("sftp");
 	        channel.connect();
-	        var remotedir = channel.pwd();
+	        //var remotedir = channel.pwd();
 	        files = channel.ls(item);
 	        exitstatus = (channel.getExitStatus() == -1) ? true : false;
 	        channel.exit();
