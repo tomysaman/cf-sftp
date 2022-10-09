@@ -22,13 +22,13 @@
 	</cffunction>
 
 	<cffunction name="getPaths" access="private" returntype="any">
-	  <cfargument name="startpath" />
-	  <cfargument name="patharray" type="array" />
-	  <cfset var qpaths = arguments.patharray />
-	  <cfset var retpaths = "" />
-	  <cfset var qJars = "" />
-	  <cfset var jarList = "" />
-	  <cfset var libname = "" />
+		<cfargument name="startpath" />
+		<cfargument name="patharray" type="array" />
+		<cfset var qpaths = arguments.patharray />
+		<cfset var retpaths = "" />
+		<cfset var qJars = "" />
+		<cfset var jarList = "" />
+		<cfset var libname = "" />
 		<cfdirectory action="list" name="qJars" directory="#arguments.startpath#" filter="*.jar" sort="name desc"/>
 		<cfloop query="qJars">
 			<cfscript>
