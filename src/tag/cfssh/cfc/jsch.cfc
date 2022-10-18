@@ -50,7 +50,11 @@ component {
 			var errStream = variables.classLoader.create("java.io.ByteArrayOutputStream").init();
 			var outStream = variables.classLoader.create("java.io.ByteArrayOutputStream").init();
 			var jschSession = getSession(argumentCollection = arguments);
+			//var i = 0;
+			//var str "";
 			var err = "";
+			//var ex = "";
+			//var e = "";
 			try {
 				//arguments.userinput = arguments.userinput.replaceAll("\\\\r?\\\\n", "\\\\n");
 				arguments.userinput = arguments.userinput.replaceAll("#chr(13)##chr(10)#", chr(10)).trim();
@@ -118,7 +122,11 @@ component {
 			throw ("");
 			*/
 			var x = 0;
+			//var i = 0;
+			//var str "";
 			var err = "";
+			//var ex = "";
+			//var e = "";
 			try {
 				for(x=1; x lte listLen(arguments.userinput,chr(10)); x++) {
 					var exitStatus = 0;
