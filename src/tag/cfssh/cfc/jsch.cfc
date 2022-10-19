@@ -50,15 +50,14 @@ component {
 			var errStream = variables.classLoader.create("java.io.ByteArrayOutputStream").init();
 			var outStream = variables.classLoader.create("java.io.ByteArrayOutputStream").init();
 			var jschSession = getSession(argumentCollection = arguments);
-			//var i = 0;
-			//var str "";
+			var i = 0;
+			var str "";
 			var err = "";
-			//var ex = "";
-			//var e = "";
+			var ex = "";
+			var e = "";
 			try {
 				//arguments.userinput = arguments.userinput.replaceAll("\\\\r?\\\\n", "\\\\n");
 				arguments.userinput = arguments.userinput.replaceAll("#chr(13)##chr(10)#", chr(10)).trim();
-				var x = 0;
 				var command = variables.classLoader.create("java.io.ByteArrayInputStream").init(arguments.userinput.getBytes("UTF-8"));
 				var channel = jschSession.openChannel("shell");
 				channel.setInputStream(command);
@@ -122,11 +121,11 @@ component {
 			throw ("");
 			*/
 			var x = 0;
-			//var i = 0;
-			//var str "";
+			var i = 0;
+			var str "";
 			var err = "";
-			//var ex = "";
-			//var e = "";
+			var ex = "";
+			var e = "";
 			try {
 				for(x=1; x lte listLen(arguments.userinput,chr(10)); x++) {
 					var exitStatus = 0;
@@ -202,8 +201,8 @@ component {
 	private String function readLine(instream) {
 		var ByteArrayOutputStream = variables.classLoader.create("java.io.ByteArrayOutputStream");
 		var baos = ByteArrayOutputStream.init();
-		for (;;) {
-			var c = instream.read();
+		for (;;) { // while(true)
+			var c = arguments.instream.read();
 			if (c == '\n') {
 				return baos.toString();
 			} else if (c == -1) {
@@ -214,16 +213,15 @@ component {
 		}
 	}
 
-
-	function preg_match(regex,str) {
-		var results = arraynew(1);
+	function preg_match(regex, str) {
+		var results = arrayNew(1);
 		var match = "";
 		var x = 1;
-		if (REFind(regex, str, 1)) {
-			match = REFind(regex, str, 1, TRUE);
-			for (x = 1; x lte arrayLen(match.pos); x = x + 1) {
+		if (REFind(arguments.regex, arguments.str, 1)) {
+			match = REFind(arguments.regex, arguments.str, 1, TRUE);
+			for (x=1; x lte arrayLen(match.pos); x++) {
 				if(match.len[x])
-					results[x] = mid(str, match.pos[x], match.len[x]);
+					results[x] = mid(arguments.str, match.pos[x], match.len[x]);
 				else
 					results[x] = '';
 			}
@@ -235,39 +233,41 @@ component {
 		var jschSession = getSession(argumentCollection = arguments);
 		var channel = jschSession.openChannel("sftp");
 		var err = "";
+		var ex = "";
+		var e = "";
 		try {
 			channel.connect();
 			//var remotedir = channel.pwd();
-			var remotedir = directory;
-			var files = channel.ls(directory);
-			var entries = queryNew("name,path,url,length,longname,hardlinks,accessed,lastModified,attributes,flags,extended,isdirectory,isLink,mode,owner,uid,group,gid");
-			queryAddRow(entries,files.size());
+			var remotedir = arguments.directory;
+			var files = channel.ls(arguments.directory);
+			var entries = queryNew("name, path, url, length, longname, hardLinks, accessed, lastModified, attributes, flags, extended, isDirectory, isLink, mode, owner, uid, group, gid");
+			queryAddRow(entries, files.size());
 			files = files.iterator();
 			var row = 0;
 			while(files.hasNext()) {
 				row++;
 				var file = files.next();
 				var attrs = file.getAttrs();
-				//var reged = preg_match("([drwx-]+)\s+(\d+)\s+(\S+)\s+(\S+)\s+(\d+)\s+(\S+\s\d+\s[\d|\:]+)\s+(\S+)",file.getLongname());
-				var reged = preg_match("([drwxt-]+)\s+(\d+)\s+(\S+)\s+(\S+)\s+(\d+).*",file.getLongname());
-				querySetCell(entries,"name",file.getFilename(),row);
-				querySetCell(entries,"path",remotedir & "/" & file.getFilename(),row);
-				querySetCell(entries,"url",file.getFilename(),row);
-				querySetCell(entries,"length",attrs.getSize(),row);
-				querySetCell(entries,"hardlinks",reged[3],row);
-				querySetCell(entries,"owner",reged[4],row);
-				querySetCell(entries,"group",reged[5],row);
-				querySetCell(entries,"accessed",convertUnixTimestamp(attrs.getATime()),row);
-				querySetCell(entries,"lastModified",attrs.getMTimeString(),row);
-				querySetCell(entries,"longname",file.getLongname(),row);
-				querySetCell(entries,"mode",right(FormatBaseN(attrs.getPermissions(),8),3),row);
-				querySetCell(entries,"flags",attrs.getFlags(),row);
-				querySetCell(entries,"uid",attrs.getUId(),row);
-				querySetCell(entries,"gid",attrs.getGId(),row);
-				querySetCell(entries,"extended",!isNull(attrs.getExtended())?attrs.getExtended().toString():"",row);
-				querySetCell(entries,"isdirectory",attrs.isDir(),row);
-				querySetCell(entries,"isLink",attrs.isLink(),row);
-				querySetCell(entries,"attributes",attrs.getPermissionsString(),row);
+				//var reged = preg_match("([drwx-]+)\s+(\d+)\s+(\S+)\s+(\S+)\s+(\d+)\s+(\S+\s\d+\s[\d|\:]+)\s+(\S+)", file.getLongname());
+				var reged = preg_match("([drwxt-]+)\s+(\d+)\s+(\S+)\s+(\S+)\s+(\d+).*", file.getLongname());
+				querySetCell(entries, "name", file.getFilename(), row);
+				querySetCell(entries, "path", remotedir & "/" & file.getFilename(), row);
+				querySetCell(entries, "url", file.getFilename(), row);
+				querySetCell(entries, "length", attrs.getSize(), row);
+				querySetCell(entries, "hardLinks", reged[3], row);
+				querySetCell(entries, "owner", reged[4], row);
+				querySetCell(entries, "group", reged[5], row);
+				querySetCell(entries, "accessed", convertUnixTimestamp(attrs.getATime()), row);
+				querySetCell(entries, "lastModified", attrs.getMTimeString(), row);
+				querySetCell(entries, "longname", file.getLongname(), row);
+				querySetCell(entries, "mode", right( FormatBaseN(attrs.getPermissions(),8), 3 ), row);
+				querySetCell(entries, "flags", attrs.getFlags(), row);
+				querySetCell(entries, "uid", attrs.getUId(), row);
+				querySetCell(entries, "gid", attrs.getGId(), row);
+				querySetCell(entries, "extended", !isNull(attrs.getExtended()) ? attrs.getExtended().toString() : "", row);
+				querySetCell(entries, "isDirectory", attrs.isDir(), row);
+				querySetCell(entries, "isLink", attrs.isLink(), row);
+				querySetCell(entries, "attributes", attrs.getPermissionsString(), row);
 			}
 		}
 		catch (any ex) {
