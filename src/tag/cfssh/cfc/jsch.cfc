@@ -288,24 +288,27 @@ component {
 		return entries;
     }
 
-
 	function putFile(required username, password="", key="", passphrase="", required host, numeric port=22, numeric timeout=30, fingerprint="", required localFile, remoteDirectory="", filename="")  {
 		var System = variables.classLoader.create("java.lang.System");
-		var localFile = variables.classLoader.create("java.io.File").init(localFile);
-		if(filename == "") {
-			filename = localFile.getName();
+		local.localFile = variables.classLoader.create("java.io.File").init(arguments.localFile);
+		if(arguments.filename == "") {
+			local.filename = local.localFile.getName();
+		} else {
+			local.filename = arguments.filename;
 		}
 		var ChannelSftp = variables.classLoader.create("com.jcraft.jsch.ChannelSftp");
 		var mode = ChannelSftp.OVERWRITE;
 		var jschSession = getSession(argumentCollection = arguments);
 		var err = "";
+		var ex = "";
+		var e = "";
 		try {
-			channel = jschSession.openChannel("sftp");
+			var channel = jschSession.openChannel("sftp");
 			channel.connect();
-			if(remoteDirectory != "") {
-				channel.cd(remoteDirectory);
+			if(arguments.remoteDirectory != "") {
+				channel.cd(arguments.remoteDirectory);
 			}
-			channel.put(variables.classLoader.create("java.io.FileInputStream").init(localFile), filename, mode);
+			channel.put(variables.classLoader.create("java.io.FileInputStream").init(local.localFile), local.filename, mode);
 			channel.quit();
 			var exitStatus = channel.getExitStatus();
 		}
@@ -328,16 +331,18 @@ component {
 	}
 
 	function getFile(required username, password="", key="", passphrase="", required host, numeric port=22, numeric timeout=30, fingerprint="", required remoteFile, required localFile, remoteDirectory="")  {
-		var localFile = variables.classLoader.create("java.io.FileOutputStream").init(localFile);
+		local.localFile = variables.classLoader.create("java.io.FileOutputStream").init(arguments.localFile);
 		var jschSession = getSession(argumentCollection = arguments);
 		var err = "";
+		var ex = "";
+		var e = "";
 		try {
-			channel = jschSession.openChannel("sftp");
+			var channel = jschSession.openChannel("sftp");
 			channel.connect();
-			if(remoteDirectory != "") {
-				channel.cd(remoteDirectory);
+			if(arguments.remoteDirectory != "") {
+				channel.cd(arguments.remoteDirectory);
 			}
-			channel.get(remoteFile,localFile);
+			channel.get(arguments.remoteFile, local.localFile);
 			var exitStatus = channel.getExitStatus();
 			channel.exit();
 		}
