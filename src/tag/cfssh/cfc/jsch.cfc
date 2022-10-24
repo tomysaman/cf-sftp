@@ -367,10 +367,12 @@ component {
 	function delete(required username, password="", key="", passphrase="", required host, numeric port=22, numeric timeout=30, fingerprint="", required item)  {
 		var jschSession = getSession(argumentCollection = arguments);
 		var err = "";
+		var ex = "";
+		var e = "";
 		try {
-			channel = jschSession.openChannel("sftp");
+			var channel = jschSession.openChannel("sftp");
 			channel.connect();
-			channel.rm(item);
+			channel.rm(arguments.item);
 			var exitStatus = channel.getExitStatus();
 			channel.exit();
 		}
@@ -392,13 +394,15 @@ component {
 		return exitStatus;
 	}
 
-	function renamefile(required username, password="", key="", passphrase="", required host, numeric port=22, numeric timeout=30, fingerprint="", required oldpath, required newpath)  {
+	function renamefile(required username, password="", key="", passphrase="", required host, numeric port=22, numeric timeout=30, fingerprint="", required oldPath, required newPath)  {
 		var jschSession = getSession(argumentCollection = arguments);
 		var err = "";
+		var ex = "";
+		var e = "";
 		try {
-			channel = jschSession.openChannel("sftp");
+			var channel = jschSession.openChannel("sftp");
 			channel.connect();
-			channel.rename(oldpath, newpath);
+			channel.rename(arguments.oldPath, arguments.newPath);
 			var exitStatus = channel.getExitStatus();
 			channel.exit();
 		}
@@ -422,19 +426,21 @@ component {
 
 	function exists(required username, password="", key="", passphrase="", required host, numeric port=22, numeric timeout=30, fingerprint="", required item)  {
 		var jschSession = getSession(argumentCollection = arguments);
-		var err = "";
 		var exitStatus = "";
 		var files = [];
+		var err = "";
+		var ex = "";
+		var e = "";
 		try {
-			channel = jschSession.openChannel("sftp");
+			var channel = jschSession.openChannel("sftp");
 			channel.connect();
 			//var remotedir = channel.pwd();
-			files = channel.ls(item);
+			files = channel.ls(arguments.item);
 			exitStatus = (channel.getExitStatus() == -1) ? true : false;
 			channel.exit();
 		}
 		catch (Any ex) {
-			if(ex.message == item) {
+			if(ex.message == arguments.item) {
 				exitStatus = false;
 			} else {
 				err = ex;
@@ -465,7 +471,7 @@ component {
 
 	function convertUnixTimestamp(input) {
 		return lsDateTimeFormat(
-			DateConvert("utc2Local", Replace(Replace(DateAdd("s", input, "January 1 1970 00:00:00"), "{ts '", ""), "'}", ""))
+			DateConvert("utc2Local", Replace(Replace(DateAdd("s", arguments.input, "January 1 1970 00:00:00"), "{ts '", ""), "'}", ""))
 			,"EEE MMM d HH:mm:ss z yyyy"
 		);
 	}
