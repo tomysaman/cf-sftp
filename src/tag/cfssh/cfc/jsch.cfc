@@ -472,7 +472,7 @@ component {
 	function convertUnixTimestamp(input) {
 		return lsDateTimeFormat(
 			DateConvert("utc2Local", Replace(Replace(DateAdd("s", arguments.input, "January 1 1970 00:00:00"), "{ts '", ""), "'}", ""))
-			,"EEE MMM d HH:mm:ss z yyyy"
+			,"EEE MMM d yyyy HH:nn:ss z"
 		);
 	}
 
