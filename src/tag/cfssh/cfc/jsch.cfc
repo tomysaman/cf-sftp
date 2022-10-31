@@ -151,7 +151,7 @@ component {
 					var tickBegin = GetTickCount();
 					var beenRunin = 0;
 					var commandResult = variables.classLoader.create("java.io.ByteArrayOutputStream").init();
-					while (beenRunin < timeout) {
+					while (beenRunin < arguments.timeout) {
 						var tickEnd = GetTickCount();
 						beenRunin = (tickEnd - tickBegin);
 						while (inStream.available() > 0) {
@@ -188,7 +188,7 @@ component {
 			if(isStruct(err)) {
 				throw(err);
 			}
-			if(beenRunin >= timeout) {
+			if(beenRunin >= arguments.timeout) {
 				throw(type="ssh.exec.error", message="request timed out!");
 			}
 			if(exitStatus != 0) {
