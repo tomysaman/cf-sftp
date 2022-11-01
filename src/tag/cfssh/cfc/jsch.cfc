@@ -53,8 +53,6 @@ component {
 			var i = 0;
 			var str "";
 			var err = "";
-			var ex = "";
-			var e = "";
 			try {
 				//arguments.userinput = arguments.userinput.replaceAll("\\\\r?\\\\n", "\\\\n");
 				arguments.userinput = arguments.userinput.replaceAll("#chr(13)##chr(10)#", chr(10)).trim();
@@ -124,8 +122,6 @@ component {
 			var i = 0;
 			var str "";
 			var err = "";
-			var ex = "";
-			var e = "";
 			try {
 				for(x=1; x lte listLen(arguments.userinput,chr(10)); x++) {
 					var exitStatus = 0;
@@ -233,8 +229,6 @@ component {
 		var jschSession = getSession(argumentCollection = arguments);
 		var channel = jschSession.openChannel("sftp");
 		var err = "";
-		var ex = "";
-		var e = "";
 		try {
 			channel.connect();
 			//var remotedir = channel.pwd();
@@ -300,8 +294,6 @@ component {
 		var mode = ChannelSftp.OVERWRITE;
 		var jschSession = getSession(argumentCollection = arguments);
 		var err = "";
-		var ex = "";
-		var e = "";
 		try {
 			var channel = jschSession.openChannel("sftp");
 			channel.connect();
@@ -334,8 +326,6 @@ component {
 		local.localFile = variables.classLoader.create("java.io.FileOutputStream").init(arguments.localFile);
 		var jschSession = getSession(argumentCollection = arguments);
 		var err = "";
-		var ex = "";
-		var e = "";
 		try {
 			var channel = jschSession.openChannel("sftp");
 			channel.connect();
@@ -367,8 +357,6 @@ component {
 	function delete(required username, password="", key="", passphrase="", required host, numeric port=22, numeric timeout=30, fingerprint="", required item)  {
 		var jschSession = getSession(argumentCollection = arguments);
 		var err = "";
-		var ex = "";
-		var e = "";
 		try {
 			var channel = jschSession.openChannel("sftp");
 			channel.connect();
@@ -397,8 +385,6 @@ component {
 	function renamefile(required username, password="", key="", passphrase="", required host, numeric port=22, numeric timeout=30, fingerprint="", required oldPath, required newPath)  {
 		var jschSession = getSession(argumentCollection = arguments);
 		var err = "";
-		var ex = "";
-		var e = "";
 		try {
 			var channel = jschSession.openChannel("sftp");
 			channel.connect();
@@ -429,8 +415,6 @@ component {
 		var exitStatus = "";
 		var files = [];
 		var err = "";
-		var ex = "";
-		var e = "";
 		try {
 			var channel = jschSession.openChannel("sftp");
 			channel.connect();
