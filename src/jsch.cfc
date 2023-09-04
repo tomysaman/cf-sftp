@@ -51,7 +51,7 @@ component {
 			var outStream = variables.classLoader.create("java.io.ByteArrayOutputStream").init();
 			var jschSession = getSession(argumentCollection = arguments);
 			var i = 0;
-			var str "";
+			var str = "";
 			var err = "";
 			try {
 				//arguments.userinput = arguments.userinput.replaceAll("\\\\r?\\\\n", "\\\\n");
@@ -120,7 +120,7 @@ component {
 			*/
 			var x = 0;
 			var i = 0;
-			var str "";
+			var str = "";
 			var err = "";
 			try {
 				for(x=1; x lte listLen(arguments.userinput,chr(10)); x++) {
