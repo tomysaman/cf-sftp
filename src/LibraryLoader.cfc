@@ -7,7 +7,7 @@
 		instance.useClassloader = true;  // try to load from classpath first
 	</cfscript>
 
-  <cffunction name="getClassloaderJars" output="false" returntype="any" access="public">
+	<cffunction name="getClassloaderJars" output="false" returntype="any" access="public">
 		<cfscript>
 			var jarsArry = getLoader().getURLClassLoader().getURLs();
 			var system = create( "java.lang.System");
