@@ -9,6 +9,8 @@
 
 	<cffunction name="getClassloaderJars" output="false" returntype="any" access="public">
 		<cfscript>
+			var x = 0;
+			var jarpath = '';
 			var jarsArry = getLoader().getURLClassLoader().getURLs();
 			var system = create( "java.lang.System");
 			var classpath = "";
@@ -27,6 +29,7 @@
 		<cfset var qpaths = arguments.patharray />
 		<cfset var retpaths = "" />
 		<cfset var qJars = "" />
+		<cfset var qProps = "" />
 		<cfset var jarList = "" />
 		<cfset var libname = "" />
 		<cfdirectory action="list" name="qJars" directory="#arguments.startpath#" filter="*.jar" sort="name desc"/>
@@ -86,6 +89,7 @@
 	<cffunction name="init" hint="Constructor" access="public" returntype="any" output="false">
 		<cfargument name="pathlist" default="">
 		<cfscript>
+			var x = 0;
 			var key = instance.static.uuid;
 			if (NOT structKeyExists(server,key)) {
 				var loadPaths = ArrayNew(1);
@@ -96,6 +100,7 @@
 				for(x = 1; x lte listLen(paths);x = x+1) {
 					loadpaths = getPaths(listGetAt(paths,x),loadpaths);
 				}
+				writeLog(file="jsch", text="SFTP/JSCH LibraryLoader loading jars from: #serializeJSON(loadPaths)#");
 				server[key] = createObject("component", "javaloader.JavaLoader").init(loadPaths=loadPaths,loadColdFusionClassPath=false);
 				instance.initialized = true;
 			}
